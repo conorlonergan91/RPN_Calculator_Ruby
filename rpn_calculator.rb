@@ -9,9 +9,8 @@
 # Provide a client for the implementation that solicits multi-line user input at a prompt and uses the implementation to
 # evaluate expressions. The user should be able to split the expression over a number of lines, with the final result
 # displayed only when the user enters a line ending with ‘=’.
-
 class RPN_Calculator
-
+    attr_reader :output
     OPERATORS = %w(+ - * / **)
 
     def initialize(input: $stdin, output: $stdout)
@@ -31,20 +30,19 @@ class RPN_Calculator
             if OPERATORS.include? element
                 calculate(element)
             elsif element =~ /^-?[0-9]+$/
-                puts element.to_i(10)
+                # puts element.to_i(10)
                 @stack.push(element.to_i)
             else
                 puts "invalid input"
             end
         end
-
-        puts "Answer is #{@stack.first}"
+        @stack.first
     end
 
     def calculate(operator)
         operands = @stack.pop(2)
         result = operands.inject(operator)
-        # puts result
+
         @stack.push(result)
     end
 end

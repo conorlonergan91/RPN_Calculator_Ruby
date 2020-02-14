@@ -1,16 +1,33 @@
-require_relative 'spec_helper.rb'
 require_relative '../rpn_calculator'
 
-describe RPN_Calculator do
-    it "adds 20 and 39" do
-        input = StringIO.new("20 39 +")
-        output = StringIO.new
+describe 'RPN_Calculator' do
+    before do
+        # Do Nothing
+        @output = StringIO.new
+    end
 
-        example = Example.new(input: input, output: output)
-        expect(example.ask_for_number).to be true
-        calculator = RPN_Calculator.new
+    after do
+        # Do Nothing
+    end
 
+    context 'given example input' do
+        # it 'solicits multi-line input' do
+        #     input = StringIO.new("1 1 + =\n")
+        #     calculator = RPN_Calculator.new(input: input, output: @output)
+        #     @output.rewind
+        #     expect(@output.read).to eq "Enter calculation [use = and return to submit]\n"
+        # end
 
-        expect(calculator.solicit_multiline_input)
+        it "returns 12" do
+            input = StringIO.new("1 1 + 3 * 2 - 3 * =\n")
+            calculator = RPN_Calculator.new(input: input, output: @output)
+            expect(calculator.solicit_multiline_input).to eq 12
+        end
+
+        it "returns 6" do
+            input = StringIO.new("2 1 2 + * =\n")
+            calculator = RPN_Calculator.new(input: input, output: @output)
+            expect(calculator.solicit_multiline_input).to eq 6
+        end
     end
 end
