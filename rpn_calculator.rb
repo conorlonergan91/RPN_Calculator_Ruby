@@ -10,7 +10,6 @@
 # evaluate expressions. The user should be able to split the expression over a number of lines, with the final result
 # displayed only when the user enters a line ending with ‘=’.
 class RPN_Calculator
-    attr_reader :output
     OPERATORS = %w(+ - * / **)
 
     def initialize(input: $stdin, output: $stdout)
@@ -19,24 +18,32 @@ class RPN_Calculator
     end
 
     def solicit_multiline_input
-        @output.puts "Enter calculation [use = and return to submit]"
+        @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
         @output.flush
-        @expression = @input.gets("=\n").chomp.chomp('=').to_s
-        parse_input(@expression.split)
+        valid_input = parse_input
+        until valid_input
+            @output.puts "\nOnly valid operations and numbers allowed!"
+            @output.puts "Operators: #{OPERATORS}"
+            @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
+            @output.flush
+            valid_input = parse_input
+        end
+        @output.puts valid_input
+        valid_input
     end
 
-    def parse_input(elements)
-        elements.each do |element|
+    def parse_input
+        expression = @input.gets("=\n").chomp("=\n").to_s.split
+        expression.each_with_index do |element, index|
             if OPERATORS.include? element
                 calculate(element)
-            elsif element =~ /^-?[0-9]+$/
-                # puts element.to_i(10)
-                @stack.push(element.to_i)
+            elsif element =~ (/^-?[0-9]*\.?[0-9]*$/)
+                @stack.push(element.to_f)
             else
-                puts "invalid input"
+                return false
             end
+            return @stack.first.round(3) if (index == expression.size - 1)
         end
-        @stack.first
     end
 
     def calculate(operator)
