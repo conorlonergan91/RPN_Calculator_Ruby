@@ -1,17 +1,19 @@
 module RPN_Calculator
-    # In order to make constant fully immutable .freeze ensures that constant itself [array] can't be modified and
-    # .map(&:freeze) ensures that the object references of the constant's values [array elements] can't be modified
+    # @note In order to make constant fully immutable .freeze ensures that constant itself [array] can't be modified and
+    #   .map(&:freeze) ensures that the object references of the constant's values [array elements] can't be modified
     OPERATORS_1_NUM = %w(sqrt sin cos tan).map(&:freeze).freeze
     OPERATORS_2_NUM = %w(+ - * / **).map(&:freeze).freeze
 
-    def parse_input
-        # (Re)Initialising stack here ensures invalid expression data isn't maintained
-        # This would need to be adjusted, or passed back to a parent stack if we wanted to allow for
-        # answer retention with multiple expressions, however as the program terminates after a single valid
-        # expression, this will suffice for now
+    # @note Must be called in class initialize method
+    def initialise_calculator
         @stack = []
+    end
 
-        expression = @input.gets("=\n").chomp("=\n").to_s.split
+    def parse_input(expression)
+        # @note Re-initialising stack here ensures invalid expression data isn't maintained. This would need to be
+        #   adjusted, or passed back to a parent stack if allowing for answer retention with multiple expressions is
+        #   desirable. As this functionality is not currently supported, this will suffice for now.
+        @stack = []
         expression.each_with_index do |element, index|
             if OPERATORS_1_NUM.include? element and @stack.length >= 1
                 calculate(element, @stack.pop(1))
