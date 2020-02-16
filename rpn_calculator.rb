@@ -1,20 +1,10 @@
-#
-# Write a Ruby module that implements a simple RPN calculator, without using 'eval'. The implementation should evaluate
-# expressions provided in Reverse Polish (Postfix) Notation. For example:
-# 1 1 + 3 * 2 - 3 * = 12 212+*=6
-# The module should at a minimum implement addition, subtraction, multiplication and division and should round ​answers
-# to three decimal places using the following rule:
-# If the value of the digit in the fourth decimal place is less than 5, then truncate the result after the third decimal
-# place. If the digit in the fourth decimal place is 5 or greater, then round up.
-# Provide a client for the implementation that solicits multi-line user input at a prompt and uses the implementation to
-# evaluate expressions. The user should be able to split the expression over a number of lines, with the final result
-# displayed only when the user enters a line ending with ‘=’.
 class RPN_Calculator
-    OPERATORS = %w(+ - * / **)
+    attr_accessor :output
+    OPERATORS_1_NUM = %w(sqrt sin cos tan)
+    OPERATORS_2_NUM = %w(+ - * / **)
 
     def initialize(input: $stdin, output: $stdout)
         @input, @output = input, output
-        @stack = []
     end
 
     def solicit_multiline_input
@@ -22,8 +12,7 @@ class RPN_Calculator
         @output.flush
         valid_input = parse_input
         until valid_input
-            @output.puts "\nOnly valid operations and numbers allowed!"
-            @output.puts "Operators: #{OPERATORS}"
+            @output.puts "\nError! Only valid operations and numbers allowed!"
             @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
             @output.flush
             valid_input = parse_input
@@ -33,24 +22,38 @@ class RPN_Calculator
     end
 
     def parse_input
+        # (Re)Initialising stack here ensures invalid expression data isn't maintained
+        # This would need to be adjusted, or passed back to a parent stack if we wanted to allow for
+        # answer retention with multiple expressions, however as the program terminates after a single valid
+        # expression, this will suffice for now
+        @stack = []
+
         expression = @input.gets("=\n").chomp("=\n").to_s.split
         expression.each_with_index do |element, index|
-            if OPERATORS.include? element
-                calculate(element)
+            if OPERATORS_1_NUM.include? element and @stack.length >= 1
+                calculate(element, @stack.pop(1))
+            elsif OPERATORS_2_NUM.include? element and @stack.length >= 2
+                calculate(element, @stack.pop(2))
             elsif element =~ (/^-?[0-9]*\.?[0-9]*$/)
                 @stack.push(element.to_f)
             else
                 return false
             end
-            return @stack.first.round(3) if (index == expression.size - 1)
+
+            if index == expression.size - 1
+                return (@stack.length == 1) ? @stack.first.round(3) : false
+            end
         end
     end
 
-    def calculate(operator)
-        operands = @stack.pop(2)
-        result = operands.inject(operator)
-
-        @stack.push(result)
+    def calculate(operator, operands)
+        if operands.length > 1
+            result = operands.inject(operator)
+            @stack.push(result)
+        else
+            result = Math.send(operator, operands[0])
+            @stack.push(result)
+        end
     end
 end
 
