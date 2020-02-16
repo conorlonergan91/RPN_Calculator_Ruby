@@ -1,25 +1,8 @@
-class RPN_Calculator
-    attr_accessor :output
-    OPERATORS_1_NUM = %w(sqrt sin cos tan)
-    OPERATORS_2_NUM = %w(+ - * / **)
-
-    def initialize(input: $stdin, output: $stdout)
-        @input, @output = input, output
-    end
-
-    def solicit_multiline_input
-        @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
-        @output.flush
-        valid_input = parse_input
-        until valid_input
-            @output.puts "\nError! Only valid operations and numbers allowed!"
-            @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
-            @output.flush
-            valid_input = parse_input
-        end
-        @output.puts valid_input
-        valid_input
-    end
+module RPN_Calculator
+    # In order to make constant fully immutable .freeze ensures that constant itself [array] can't be modified and
+    # .map(&:freeze) ensures that the object references of the constant's values [array elements] can't be modified
+    OPERATORS_1_NUM = %w(sqrt sin cos tan).map(&:freeze).freeze
+    OPERATORS_2_NUM = %w(+ - * / **).map(&:freeze).freeze
 
     def parse_input
         # (Re)Initialising stack here ensures invalid expression data isn't maintained
@@ -55,9 +38,4 @@ class RPN_Calculator
             @stack.push(result)
         end
     end
-end
-
-if __FILE__ == $0
-    calculator = RPN_Calculator.new
-    calculator.solicit_multiline_input
 end
