@@ -58,7 +58,7 @@ module RPNCalculator
   end
 
   private
-
+  #
   # Performs the appropriate calculation depending on the subset of the
   #   operator passed
   #

@@ -13,8 +13,8 @@ class RPNClient
   #
   # @param input [StringIO] the designate user input source
   # @param output [StringIO] the designate console output destination
-  # @return input [StringIO]
-  # @return output [StringIO]
+  # @return [StringIO] input
+  # @return [StringIO] output
   def initialize(input: $stdin, output: $stdout)
     @input = input
     @output = output
