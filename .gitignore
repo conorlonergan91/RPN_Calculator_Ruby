@@ -1,2 +1,9 @@
 
 .idea/
+launch_container.sh
+save_image.sh
+coverage/
+
+deep_cover/
+
+doc/

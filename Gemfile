@@ -1,3 +1,5 @@
 source 'http://rubygems.org'
 
-gem "rspec"
+gem 'rspec'
+gem 'deep-cover'
+gem 'rubocop'
