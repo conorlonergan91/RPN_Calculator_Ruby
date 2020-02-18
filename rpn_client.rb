@@ -7,21 +7,26 @@ class RPN_Client
 # @param output [StringIO] the Designate console output destination
     def initialize(input: $stdin, output: $stdout)
         @input, @output = input, output
+
         initialise_calculator
     end
 
 # @return [Object]
-    def solicit_multiline_input(verbose: false)
+    def solicit_multiline_input
         @output.puts "Please provide RPN expression. Type '=' and hit return to submit."
         @output.flush
 
         loop do
-            expression = @input.gets("=\n").chomp("=\n").to_s.split
-            valid_input = parse_input(expression)
+            expression = @input.gets("=\n").to_s.chomp("=\n").split
 
-            if valid_input
-                @output.puts valid_input
-                return valid_input
+            unless expression.empty?
+                valid_input = parse_input(expression)
+
+                if valid_input
+                    @output.puts valid_input
+
+                    return valid_input
+                end
             end
 
             @output.puts "\nError! Only valid operations and numbers allowed!"
