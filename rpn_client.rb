@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'RPN_Calculator'
+require_relative 'rpn_calculator'
 
 # Client for the RPN calculator. Solicits input from the user, formats the input
 #   into a valid expression sends input to be calculated and then handles the
@@ -26,7 +26,7 @@ class RPNClient
   #   to be calculated and validates the input. If input is invalid, displays
   #   advice message to user and solicits another valid expression.
   def solicit_multiline_input
-    @output.puts "Input RPN expression. Type '=' and hit return to submit."
+    @output.puts %(Input RPN expression. Type "=" and hit return to submit.)
     @output.flush
 
     loop do
@@ -42,8 +42,8 @@ class RPNClient
         end
       end
 
-      @output.puts "\nError! Only valid operations and numbers allowed!"
-      @output.puts "Input RPN expression. Type '=' and hit return to submit."
+      @output.puts %(\nError! Only valid operations and numbers allowed!)
+      @output.puts %(Input RPN expression. Type "=" and hit return to submit.)
       @output.flush
     end
   end
