@@ -52,8 +52,6 @@ This can be run from the project's root directory using `rspec spec/rpn_calculat
 
 Two files launch_container.sh and save_image.sh are included just to showcase a basic use of docker containers for this project. These simple scripts ensure container environments stay up to date and that each container connects to a shared local folder on my machine so files can easily be accessed and updated using RubyMine.
 
-![IDE Screenshot][screenshot]
 
-[screenshot]: https://github.com/conorlonergan91/RPN_Calculator_Ruby/blob/master/IDE_Screenshot.png "IDE Screenshot"
 
 Developed for @Storyful Dublin

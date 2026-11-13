@@ -1,9 +1,16 @@
+# macOS
+.DS_Store
 
+# Editors
 .idea/
-launch_container.sh
-save_image.sh
-coverage/
 
-deep_cover/
+# Built gems
+*.gem
 
+# Generated documentation
+.yardoc/
 doc/
+
+# Test coverage
+coverage/
+deep_cover/
